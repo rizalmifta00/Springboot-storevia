@@ -4,6 +4,7 @@ import com.learn.store.Dto.Category.CategoryDto;
 import com.learn.store.Dto.Category.CategorySaveDto;
 import com.learn.store.Dto.Category.CategorySubCategorySaveDto;
 import com.learn.store.Dto.ResponseDto;
+import com.learn.store.Models.Category;
 import com.learn.store.Service.CategoryService;
 import com.learn.store.Util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,6 +45,31 @@ public class CategoryController {
             return new ResponseEntity<>(new ResponseDto<>(),HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseDto<CategoryDto>> findById(@PathVariable Long id){
+        try {
+            ResponseDto<CategoryDto> response =
+                    ResponseUtil.responseDtoSucces(categoryService.findById(id),"success get data category");
+            return new ResponseEntity<>(response,HttpStatus.OK);
+        }catch (Exception e){
+            ResponseDto<CategoryDto> response =
+                    ResponseUtil.responseDtoFailed(null,e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping()
+    public ResponseEntity<ResponseDto<CategoryDto>> findByName(@RequestParam String name){
+        try{
+            ResponseDto<CategoryDto> response =
+                    ResponseUtil.responseDtoSucces(categoryService.findByName(name),"success get data " + name);
+            return new ResponseEntity<>(response,HttpStatus.OK);
+        }catch (Exception e){
+            ResponseDto<CategoryDto> response =
+                    ResponseUtil.responseDtoFailed(null,e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping("/categorysub")
     public ResponseEntity<ResponseDto<CategorySubCategorySaveDto>> createCategorySubCategory(@RequestBody CategorySubCategorySaveDto categorySubCategorySaveDto){
@@ -55,6 +81,30 @@ public class CategoryController {
             ResponseDto<CategorySubCategorySaveDto> response = ResponseUtil.responseDtoFailed(null,e.getMessage(),HttpStatus.BAD_REQUEST);
             return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
 
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseDto<CategorySaveDto>> updateCategory(@PathVariable Long id , @RequestBody CategorySaveDto categorySaveDto){
+        try{
+            CategorySaveDto category = categoryService.update(id, categorySaveDto);
+            ResponseDto<CategorySaveDto> response = ResponseUtil.responseDtoSucces(category,"succes update data");
+            return new ResponseEntity<>(response,HttpStatus.CREATED);
+        }catch (Exception e){
+            ResponseDto<CategorySaveDto> response = ResponseUtil.responseDtoFailed(null, e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseDto<CategoryDto>> delete(@PathVariable long id){
+        try{
+            CategoryDto category = categoryService.delete(id);
+            ResponseDto<CategoryDto> response = ResponseUtil.responseDtoSucces(category,"succes delete data id :" + category.getName());
+            return new ResponseEntity<>(response,HttpStatus.OK);
+        }catch (Exception e){
+            ResponseDto<CategoryDto> response = ResponseUtil.responseDtoFailed(null, e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
         }
     }
 

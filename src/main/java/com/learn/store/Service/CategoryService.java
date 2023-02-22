@@ -13,5 +13,11 @@ public interface CategoryService {
 
    CategorySubCategorySaveDto createCategoryWithSubCategory(CategorySubCategorySaveDto categorySubCategorySaveDto);
 
-    CategoryDto update(Long id, CategoryDto categoryDto);
+    CategorySaveDto update(Long id, CategorySaveDto categorySaveDto);
+
+    CategoryDto findById(Long id);
+
+    CategoryDto findByName(String name);
+
+    CategoryDto delete(Long id);
 }
