@@ -92,7 +92,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto findByName(String name) {
-        Category category = categoryRepository.findByName(name)
+        Category category = categoryRepository.findbyNama(name)
                 .orElseThrow(()->new EntityNotFoundException("Category not found with Name: " +name));
         return modelMapper.map(category,CategoryDto.class);
     }
