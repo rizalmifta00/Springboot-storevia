@@ -13,8 +13,11 @@ import io.swagger.v3.oas.annotations.tags.Tags;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,12 +30,15 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping()
-    public ResponseEntity<ResponseDto<CategorySaveDto>> createCategory(@RequestBody CategorySaveDto categorySaveDto){
+    public ResponseEntity<ResponseDto<CategorySaveDto>> createCategory(@Valid @RequestBody CategorySaveDto categorySaveDto , Errors errors){
+
         try{
             CategorySaveDto  category = categoryService.create(categorySaveDto);
+
             ResponseDto<CategorySaveDto> response = ResponseUtil.responseDtoSucces(category,"Category created Successfully");
             return new ResponseEntity<>(response,HttpStatus.CREATED);
         }catch (Exception e){
+
             ResponseDto<CategorySaveDto> response = ResponseUtil.responseDtoFailed(null, e.getMessage(),HttpStatus.BAD_REQUEST);
             return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
         }

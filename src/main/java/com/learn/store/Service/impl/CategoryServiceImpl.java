@@ -14,9 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,6 +51,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public CategorySaveDto create(CategorySaveDto categorySaveDto){
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<CategorySaveDto>> violations = validator.validate(categorySaveDto);
+        if(!violations.isEmpty()){
+            throw new ConstraintViolationException(violations);
+        }
         Category category = modelMapper.map(categorySaveDto, Category.class);
         category = categoryRepository.save(category);
         return modelMapper.map(category,CategorySaveDto.class);

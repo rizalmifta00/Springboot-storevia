@@ -1,15 +1,14 @@
-package com.learn.store.Dto.Category;
+package com.learn.store.Dto.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategorySaveDto {
-    @NotEmpty(message = "Name is Required")
+public class JwtResponseDto {
+    private String token;
     private String name;
+    private Long id;
 }
